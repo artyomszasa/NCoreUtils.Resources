@@ -93,5 +93,8 @@ namespace NCoreUtils.Resources
 
         public ValueTask<Uri> GetUriAsync(CancellationToken cancellationToken)
             => GoogleCloudStorageResourceSerializer.SerializeAsync(this, cancellationToken);
+
+        public override string ToString()
+            => $"gs://{BucketName}/{ObjectName}";
     }
 }

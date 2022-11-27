@@ -34,7 +34,6 @@ namespace NCoreUtils.Resources
             {
                 return ref builder;
             }
-            var escapedValue = Uri.EscapeDataString(value);
             if (first)
             {
                 first = false;
@@ -46,17 +45,20 @@ namespace NCoreUtils.Resources
             }
             builder.Append(name);
             builder.Append('=');
-            builder.Append(escapedValue);
+#if NET6_0_OR_GREATER
+            builder.AppendUriEscaped(value);
+#else
+            builder.Append(Uri.EscapeDataString(value));
+#endif
             return ref builder;
         }
 
         private static ref SpanBuilder AppendQ(this ref SpanBuilder builder, scoped ref bool first, string name, int? value)
         {
-            if (!value.HasValue)
+            if (value is not int intValue)
             {
                 return ref builder;
             }
-            var escapedValue = value.Value.ToString();
             if (first)
             {
                 first = false;
@@ -68,17 +70,16 @@ namespace NCoreUtils.Resources
             }
             builder.Append(name);
             builder.Append('=');
-            builder.Append(escapedValue);
+            builder.Append(intValue);
             return ref builder;
         }
 
         private static ref SpanBuilder AppendQ(this ref SpanBuilder builder, scoped ref bool first, string name, bool? value)
         {
-            if (!value.HasValue)
+            if (value is not bool boolValue)
             {
                 return ref builder;
             }
-            var escapedValue = value.Value ? "true" : "false";
             if (first)
             {
                 first = false;
@@ -90,7 +91,7 @@ namespace NCoreUtils.Resources
             }
             builder.Append(name);
             builder.Append('=');
-            builder.Append(escapedValue);
+            builder.Append(boolValue ? "true" : "false");
             return ref builder;
         }
 
@@ -140,7 +141,9 @@ namespace NCoreUtils.Resources
                     contentType: contentType,
                     cacheControl: cacheControl,
                     isPublic: isPublic,
-                    credential: GoogleStorageCredential.ViaAccessToken(accessToken ?? string.Empty),
+                    credential: string.IsNullOrEmpty(accessToken)
+                        ? default
+                        : GoogleStorageCredential.ViaAccessToken(accessToken),
                     passthrough: passthrough
                 );
                 return true;

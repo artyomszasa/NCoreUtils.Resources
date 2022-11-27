@@ -23,4 +23,7 @@ public class AspNetCoreRequestResource : IReadableResource
 
     public IStreamProducer CreateProducer()
         => StreamProducer.FromStream(Request.Body, leaveOpen: true);
+
+    public override string ToString()
+        => $"Request[Content-Type = {Request.ContentType}, Content-Length = {Request.ContentLength}]";
 }

@@ -28,4 +28,7 @@ public class AspNetCoreResponseResource : IWritableResource
             }
             return new System.Threading.Tasks.ValueTask<IStreamConsumer>(StreamConsumer.ToStream(Response.Body));
         });
+
+    public override string ToString()
+        => "Response";
 }
