@@ -2,43 +2,37 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Options;
 
-namespace NCoreUtils.Resources
+namespace NCoreUtils.Resources;
+
+public class CompositeResourceFactory(IOptionsMonitor<CompositeResourceFactoryConfiguration> configuration) : IResourceFactory
 {
-    public class CompositeResourceFactory : IResourceFactory
+    private readonly IOptionsMonitor<CompositeResourceFactoryConfiguration> _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+
+    public bool TryCreateReadable(Uri uri, [NotNullWhen(true)] out IReadableResource? resource)
     {
-        private readonly IOptionsMonitor<CompositeResourceFactoryConfiguration> _configuration;
-
-        public CompositeResourceFactory(IOptionsMonitor<CompositeResourceFactoryConfiguration> configuration)
+        foreach (var factory in _configuration.CurrentValue.Factories)
         {
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-        }
-
-        public bool TryCreateReadable(Uri uri, [NotNullWhen(true)] out IReadableResource? resource)
-        {
-            foreach (var factory in _configuration.CurrentValue.Factories)
+            if (factory.TryCreateReadable(uri, out var r))
             {
-                if (factory.TryCreateReadable(uri, out var r))
-                {
-                    resource = r;
-                    return true;
-                }
+                resource = r;
+                return true;
             }
-            resource = default;
-            return false;
         }
+        resource = default;
+        return false;
+    }
 
-        public bool TryCreateWritable(Uri uri, [NotNullWhen(true)] out IWritableResource? resource)
+    public bool TryCreateWritable(Uri uri, [NotNullWhen(true)] out IWritableResource? resource)
+    {
+        foreach (var factory in _configuration.CurrentValue.Factories)
         {
-            foreach (var factory in _configuration.CurrentValue.Factories)
+            if (factory.TryCreateWritable(uri, out var r))
             {
-                if (factory.TryCreateWritable(uri, out var r))
-                {
-                    resource = r;
-                    return true;
-                }
+                resource = r;
+                return true;
             }
-            resource = default;
-            return false;
         }
+        resource = default;
+        return false;
     }
 }

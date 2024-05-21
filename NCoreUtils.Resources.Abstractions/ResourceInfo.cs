@@ -1,10 +1,6 @@
 namespace NCoreUtils;
 
-public readonly partial record struct ResourceInfo(string? MediaType, long? Length = default);
-
-public readonly partial record struct ResourceInfo
+public readonly partial record struct ResourceInfo(string? MediaType, long? Length = default)
 {
-    public ResourceInfo(long? length)
-        : this(default, length)
-    { }
+    public ResourceInfo(long? length) : this(default, length) { }
 }

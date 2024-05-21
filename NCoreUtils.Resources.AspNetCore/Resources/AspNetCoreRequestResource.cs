@@ -6,14 +6,11 @@ using NCoreUtils.IO;
 
 namespace NCoreUtils.Resources;
 
-public class AspNetCoreRequestResource : IReadableResource
+public class AspNetCoreRequestResource(HttpRequest request) : IReadableResource
 {
-    public HttpRequest Request { get; }
+    public HttpRequest Request { get; } = request ?? throw new ArgumentNullException(nameof(request));
 
     public bool Reusable => false;
-
-    public AspNetCoreRequestResource(HttpRequest request)
-        => Request = request ?? throw new ArgumentNullException(nameof(request));
 
     public ValueTask<ResourceInfo> GetInfoAsync(CancellationToken cancellationToken = default)
         => new(new ResourceInfo(

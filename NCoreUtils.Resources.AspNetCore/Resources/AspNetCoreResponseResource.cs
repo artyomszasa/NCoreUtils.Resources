@@ -4,16 +4,11 @@ using NCoreUtils.IO;
 
 namespace NCoreUtils.Resources;
 
-public class AspNetCoreResponseResource : IWritableResource
+public class AspNetCoreResponseResource(HttpResponse response) : IWritableResource
 {
-    public HttpResponse Response { get; }
+    public HttpResponse Response { get; } = response ?? throw new ArgumentNullException(nameof(response));
 
     public bool Reusable => false;
-
-    public AspNetCoreResponseResource(HttpResponse response)
-    {
-        Response = response ?? throw new ArgumentNullException(nameof(response));
-    }
 
     public IStreamConsumer CreateConsumer(ResourceInfo writeOptions = default)
         => StreamConsumer.Delay(_ =>
