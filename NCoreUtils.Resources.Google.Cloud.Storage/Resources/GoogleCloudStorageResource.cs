@@ -79,7 +79,7 @@ public class GoogleCloudStorageResource
         : this(utils, GoogleCloudStorageCredential.ViaProvider(accessTokenProvider), bucketName, objectName, contentType, cacheControl, isPublic, logger)
     { }
 
-    private ValueTask<string> GetAccessTokenAsync(string[] scopes, CancellationToken cancellationToken)
+    private ValueTask<string> GetAccessTokenAsync(ScopeCollection scopes, CancellationToken cancellationToken)
         => Credential.GetAccessTokenAsync(scopes, cancellationToken);
 
     public IStreamProducer CreateProducer()

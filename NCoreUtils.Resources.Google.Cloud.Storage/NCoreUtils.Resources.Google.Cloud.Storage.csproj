@@ -2,12 +2,13 @@
   <PropertyGroup>
     <TargetFrameworks>net8.0;net7.0;net6.0;netstandard2.1</TargetFrameworks>
     <RootNamespace>NCoreUtils</RootNamespace>
+    <Version>8.1.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\NCoreUtils.Resources\NCoreUtils.Resources.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NCoreUtils.Extensions.Google.Cloud.Storage.Core" Version="8.0.0" />
+    <PackageReference Include="NCoreUtils.Extensions.Google.Cloud.Storage.Core" Version="8.1.1" />
     <PackageReference Include="NCoreUtils.Extensions.Memory" Version="8.0.0" />
     <PackageReference Include="NCoreUtils.Extensions.String" Version="8.0.0" />
   </ItemGroup>

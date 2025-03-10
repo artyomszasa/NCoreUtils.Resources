@@ -9,10 +9,6 @@ namespace NCoreUtils.Resources;
 
 public readonly struct GoogleCloudStorageCredential : IEquatable<GoogleCloudStorageCredential>
 {
-    internal static string[] ReadOnlyScopes { get; } = [GoogleCloudStorageUtils.ReadOnlyScope];
-
-    internal static string[] ReadWriteScopes { get; } = [GoogleCloudStorageUtils.ReadWriteScope];
-
     #region factory
 
     public static GoogleCloudStorageCredential ViaAccessToken(string accessToken)
@@ -81,7 +77,7 @@ public readonly struct GoogleCloudStorageCredential : IEquatable<GoogleCloudStor
 
     #endregion
 
-    public ValueTask<string> GetAccessTokenAsync(string[] scope, CancellationToken cancellationToken = default)
+    public ValueTask<string> GetAccessTokenAsync(ScopeCollection scope, CancellationToken cancellationToken = default)
         => AccessToken switch
         {
             null => AccessTokenProvider switch
