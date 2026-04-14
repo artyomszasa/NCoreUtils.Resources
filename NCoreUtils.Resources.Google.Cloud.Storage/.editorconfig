@@ -1,0 +1,10 @@
+# Top level entry required to mark this as a global AnalyzerConfig file
+is_global = true
+
+# CA1848: LoggerMessage would add unnecessary ceremony here
+
+# dotnet_diagnostic.CA1848.severity = suggestion
+
+# CA1873: Logging argument cost is negligible here
+
+dotnet_diagnostic.CA1873.severity = silent

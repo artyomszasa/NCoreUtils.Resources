@@ -1,5 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisMode>All</AnalysisMode>
+  </PropertyGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\NCoreUtils.Resources\NCoreUtils.Resources.csproj" />
     <ProjectReference Include="..\NCoreUtils.Resources.AspNetCore\NCoreUtils.Resources.AspNetCore.csproj" />

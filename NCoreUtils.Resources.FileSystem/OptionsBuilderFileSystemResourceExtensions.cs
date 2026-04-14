@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Options;
 using NCoreUtils.Resources;
 
@@ -13,6 +14,10 @@ public static class OptionsBuilderFileSystemResourceExtensions
     public static OptionsBuilder<CompositeResourceFactoryConfiguration> AddFileSystemResourceFactory(
         this OptionsBuilder<CompositeResourceFactoryConfiguration> optionsBuilder)
     {
+        if (optionsBuilder is null)
+        {
+            throw new ArgumentNullException(nameof(optionsBuilder));
+        }
         optionsBuilder.Configure(static config =>
         {
             config.AddFactory(new FileSystemResourceFactory());

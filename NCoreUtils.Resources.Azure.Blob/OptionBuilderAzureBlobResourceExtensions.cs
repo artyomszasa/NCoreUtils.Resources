@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Options;
 using NCoreUtils.Resources;
 
@@ -13,6 +14,10 @@ public static class OptionBuilderAzureBlobResourceExtensions
     public static OptionsBuilder<CompositeResourceFactoryConfiguration> AddAzureBlobResourceFactory(
         this OptionsBuilder<CompositeResourceFactoryConfiguration> optionsBuilder)
     {
+        if (optionsBuilder is null)
+        {
+            throw new ArgumentNullException(nameof(optionsBuilder));
+        }
         optionsBuilder.Configure(static config =>
         {
             config.AddFactory(new AzureBlobResourceFactory());

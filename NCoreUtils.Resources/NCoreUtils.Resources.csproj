@@ -4,6 +4,10 @@
     <RootNamespace>NCoreUtils</RootNamespace>
     <IsAotCompatible>true</IsAotCompatible>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisMode>All</AnalysisMode>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\NCoreUtils.Resources.Abstractions\NCoreUtils.Resources.Abstractions.csproj" />
   </ItemGroup>

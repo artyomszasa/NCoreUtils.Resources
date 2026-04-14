@@ -39,6 +39,7 @@ public class AzureBlobResource : IReadableResource, IWritableResource, ISerializ
         };
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2007:Consider calling ConfigureAwait on the awaited task", Justification = "Az await using itt zajos.")]
     public IStreamProducer CreateProducer() => StreamProducer.Create(async (stream, cancellationToken) =>
     {
         await using var source = await BlobClient.OpenReadAsync(new BlobOpenReadOptions(false), cancellationToken)
@@ -47,12 +48,12 @@ public class AzureBlobResource : IReadableResource, IWritableResource, ISerializ
         await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
     });
 
-    public IStreamConsumer CreateConsumer(ResourceInfo writeOptions = default)=> StreamConsumer.Create((stream, cancellationToken) =>
+    public IStreamConsumer CreateConsumer(ResourceInfo writeOptions = default)=> StreamConsumer.Create(async (stream, cancellationToken) =>
     {
         var options = new BlobUploadOptions();
         options.HttpHeaders ??= new BlobHttpHeaders();
         options.HttpHeaders.ContentType = writeOptions.MediaType ?? "application/octet-stream";
-        return new(BlobClient.UploadAsync(stream, options, cancellationToken));
+        await BlobClient.UploadAsync(stream, options, cancellationToken).ConfigureAwait(false);
     });
 
     public ValueTask<Uri> GetUriAsync(CancellationToken cancellationToken)

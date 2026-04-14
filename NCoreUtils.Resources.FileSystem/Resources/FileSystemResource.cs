@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using NCoreUtils.IO;
@@ -26,6 +27,7 @@ public class FileSystemResource : IReadableResource, IWritableResource, ISeriali
         _ => default
     };
 
+    [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "A producer kezeli a streamet.")]
     public IStreamProducer CreateProducer() => StreamProducer.FromStream(new FileStream(
         AbsolutePath,
         FileMode.Open,
@@ -35,6 +37,7 @@ public class FileSystemResource : IReadableResource, IWritableResource, ISeriali
         true
     ), BufferSize ?? DefaultBufferSize);
 
+    [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "A consumer kezeli a streamet.")]
     public IStreamConsumer CreateConsumer(ResourceInfo writeOptions = default)=> StreamConsumer.ToStream(new FileStream(
         AbsolutePath,
         FileMode.Create,
