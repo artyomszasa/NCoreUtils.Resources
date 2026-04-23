@@ -6,7 +6,7 @@ namespace NCoreUtils.Resources;
 
 public class CompositeResourceFactory(IOptionsMonitor<CompositeResourceFactoryConfiguration> configuration) : IResourceFactory
 {
-    private readonly IOptionsMonitor<CompositeResourceFactoryConfiguration> _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+    private readonly IOptionsMonitor<CompositeResourceFactoryConfiguration> _configuration = configuration.ThrowIfNull();
 
     public bool TryCreateReadable(Uri uri, [NotNullWhen(true)] out IReadableResource? resource)
     {

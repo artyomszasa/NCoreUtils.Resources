@@ -7,6 +7,14 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisMode>All</AnalysisMode>
   </PropertyGroup>
+  <!-- NOTE: NET Standard polyfill -->
+  <ItemGroup Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">
+    <Compile Include="..\shared\CompilerServices\**" />
+  </ItemGroup>
+  <!-- NOTE: Common -->
+  <ItemGroup>
+    <Compile Include="..\shared\Check.cs" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NCoreUtils.Resources\NCoreUtils.Resources.csproj" />
   </ItemGroup>

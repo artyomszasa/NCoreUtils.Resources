@@ -104,10 +104,7 @@ public static class GoogleCloudStorageResourceSerializer
         GoogleCloudStorageResource resource,
         CancellationToken cancellationToken)
     {
-        if (resource is null)
-        {
-            throw new ArgumentNullException(nameof(resource));
-        }
+        resource.ThrowIfNull();
         var accessToken = await resource.Credential.GetAccessTokenAsync(GoogleCloudStorageUtils.ReadWriteScope, cancellationToken).ConfigureAwait(false);
         var isPublic = resource.IsPublic ? "true" : string.Empty;
         var builder = new UriBuilder

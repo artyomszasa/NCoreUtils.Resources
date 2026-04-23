@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net10.0;net8.0;net6.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net10.0;net8.0;net6.0;netstandard2.1;net48</TargetFrameworks>
     <RootNamespace>NCoreUtils</RootNamespace>
     <IsAotCompatible>true</IsAotCompatible>
   </PropertyGroup>
@@ -8,11 +8,18 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisMode>All</AnalysisMode>
   </PropertyGroup>
+  <!-- NOTE: NET Standard polyfill -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net48' ">
+    <Compile Include="..\shared\CodeAnalysis\**" />
+  </ItemGroup>
+  <ItemGroup Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">
+    <Compile Include="..\shared\CompilerServices\**" />
+  </ItemGroup>
+  <!-- NOTE: Common -->
+  <ItemGroup>
+    <Compile Include="..\shared\Check.cs" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NCoreUtils.IO.Abstractions" Version="10.0.0" />
-  </ItemGroup>
-  <ItemGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">
-    <Compile Remove="CodeAnalysis\**" />
-    <Compile Remove="CompilerServices\**" />
   </ItemGroup>
 </Project>

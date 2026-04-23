@@ -7,10 +7,7 @@ public static class AzureBlobResourceSerializer
 {
     public static Uri Serialize(AzureBlobResource resource)
     {
-        if (resource is null)
-        {
-            throw new ArgumentNullException(nameof(resource));
-        }
+        resource.ThrowIfNull();
         return new($"az://{resource.ContainerName}/{resource.BlobName}", UriKind.Absolute);
     }
 

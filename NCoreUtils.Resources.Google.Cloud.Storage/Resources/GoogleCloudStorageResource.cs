@@ -44,7 +44,7 @@ public class GoogleCloudStorageResource
         bool isPublic = true,
         ILogger? logger = default)
     {
-        Utils = utils ?? throw new ArgumentNullException(nameof(utils));
+        Utils = utils.ThrowIfNull();
         // Passthrough = passthrough;
         BucketName = bucketName;
         ObjectName = objectName;

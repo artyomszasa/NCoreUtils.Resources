@@ -6,7 +6,7 @@ namespace NCoreUtils.Resources;
 
 public class AspNetCoreResourceFactory(IHttpContextAccessor httpContextAccessor) : IResourceFactory
 {
-    public IHttpContextAccessor HttpContextAccessor { get; } = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+    public IHttpContextAccessor HttpContextAccessor { get; } = httpContextAccessor.ThrowIfNull();
 
     public bool TryCreateReadable(Uri uri, [NotNullWhen(true)] out IReadableResource? resource)
     {

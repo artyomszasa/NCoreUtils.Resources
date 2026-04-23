@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -8,7 +7,7 @@ namespace NCoreUtils.Resources;
 
 public class AspNetCoreRequestResource(HttpRequest request) : IReadableResource
 {
-    public HttpRequest Request { get; } = request ?? throw new ArgumentNullException(nameof(request));
+    public HttpRequest Request { get; } = request.ThrowIfNull();
 
     public bool Reusable => false;
 

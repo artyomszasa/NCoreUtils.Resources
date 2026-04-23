@@ -7,19 +7,15 @@ using NCoreUtils.IO;
 
 namespace NCoreUtils.Resources;
 
-public class FileSystemResource : IReadableResource, IWritableResource, ISerializableResource
+public class FileSystemResource(string absolutePath, int? bufferSize) : IReadableResource, IWritableResource, ISerializableResource
 {
     public const int DefaultBufferSize = 16 * 1024;
 
-    public string AbsolutePath { get; }
+    public string AbsolutePath { get; } = absolutePath.ThrowIfNull();
 
-    public int? BufferSize { get; }
+    public int? BufferSize { get; } = bufferSize;
 
-    public FileSystemResource(string absolutePath, int? bufferSize)
-    {
-        AbsolutePath = absolutePath ?? throw new ArgumentNullException(nameof(absolutePath));
-        BufferSize = bufferSize;
-    }
+    public bool Reusable => true;
 
     public ValueTask<ResourceInfo> GetInfoAsync(CancellationToken cancellationToken = default) => new FileInfo(AbsolutePath) switch
     {

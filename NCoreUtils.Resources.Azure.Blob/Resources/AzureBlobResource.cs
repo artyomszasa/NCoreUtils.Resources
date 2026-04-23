@@ -7,13 +7,16 @@ using NCoreUtils.IO;
 
 namespace NCoreUtils.Resources;
 
-public class AzureBlobResource : IReadableResource, IWritableResource, ISerializableResource
+public class AzureBlobResource(string containerName, string blobName)
+    : IReadableResource
+    , IWritableResource
+    , ISerializableResource
 {
     private BlobClient? _blobClient;
 
-    public string ContainerName { get; }
+    public string ContainerName { get; } = containerName.ThrowIfNull();
 
-    public string BlobName { get; }
+    public string BlobName { get; } = blobName.ThrowIfNull();
 
     protected BlobClient BlobClient => _blobClient ??= new BlobClient(
         connectionString: Environment.GetEnvironmentVariable("AZURE_STORAGE_CONNECTION_STRING"),
@@ -22,12 +25,6 @@ public class AzureBlobResource : IReadableResource, IWritableResource, ISerializ
     );
 
     public bool Reusable => true;
-
-    public AzureBlobResource(string containerName, string blobName)
-    {
-        ContainerName = containerName ?? throw new ArgumentNullException(nameof(containerName));
-        BlobName = blobName ?? throw new ArgumentNullException(nameof(blobName));
-    }
 
     public async ValueTask<ResourceInfo> GetInfoAsync(CancellationToken cancellationToken = default)
     {
@@ -42,7 +39,10 @@ public class AzureBlobResource : IReadableResource, IWritableResource, ISerializ
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2007:Consider calling ConfigureAwait on the awaited task", Justification = "Az await using itt zajos.")]
     public IStreamProducer CreateProducer() => StreamProducer.Create(async (stream, cancellationToken) =>
     {
-        await using var source = await BlobClient.OpenReadAsync(new BlobOpenReadOptions(false), cancellationToken)
+#if !NETFRAMEWORK
+        await
+#endif
+        using var source = await BlobClient.OpenReadAsync(new BlobOpenReadOptions(false), cancellationToken)
             .ConfigureAwait(false);
         await source.CopyToAsync(stream, 32 * 1024, cancellationToken).ConfigureAwait(false);
         await stream.FlushAsync(cancellationToken).ConfigureAwait(false);
