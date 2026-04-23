@@ -13,7 +13,7 @@ public static class OptionsBuilderFileSystemResourceExtensions
     public static OptionsBuilder<CompositeResourceFactoryConfiguration> AddFileSystemResourceFactory(
         this OptionsBuilder<CompositeResourceFactoryConfiguration> optionsBuilder)
     {
-        optionsBuilder.Configure(static config =>
+        optionsBuilder.ThrowIfNull().Configure(static config =>
         {
             config.AddFactory(new FileSystemResourceFactory());
         });

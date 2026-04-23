@@ -1,24 +1,21 @@
 using System;
 using System.IO;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using NCoreUtils.IO;
 
 namespace NCoreUtils.Resources;
 
-public class FileSystemResource : IReadableResource, IWritableResource, ISerializableResource
+public class FileSystemResource(string absolutePath, int? bufferSize) : IReadableResource, IWritableResource, ISerializableResource
 {
     public const int DefaultBufferSize = 16 * 1024;
 
-    public string AbsolutePath { get; }
+    public string AbsolutePath { get; } = absolutePath.ThrowIfNull();
 
-    public int? BufferSize { get; }
+    public int? BufferSize { get; } = bufferSize;
 
-    public FileSystemResource(string absolutePath, int? bufferSize)
-    {
-        AbsolutePath = absolutePath ?? throw new ArgumentNullException(nameof(absolutePath));
-        BufferSize = bufferSize;
-    }
+    public bool Reusable => true;
 
     public ValueTask<ResourceInfo> GetInfoAsync(CancellationToken cancellationToken = default) => new FileInfo(AbsolutePath) switch
     {
@@ -26,6 +23,7 @@ public class FileSystemResource : IReadableResource, IWritableResource, ISeriali
         _ => default
     };
 
+    [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "A producer kezeli a streamet.")]
     public IStreamProducer CreateProducer() => StreamProducer.FromStream(new FileStream(
         AbsolutePath,
         FileMode.Open,
@@ -35,6 +33,7 @@ public class FileSystemResource : IReadableResource, IWritableResource, ISeriali
         true
     ), BufferSize ?? DefaultBufferSize);
 
+    [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "A consumer kezeli a streamet.")]
     public IStreamConsumer CreateConsumer(ResourceInfo writeOptions = default)=> StreamConsumer.ToStream(new FileStream(
         AbsolutePath,
         FileMode.Create,

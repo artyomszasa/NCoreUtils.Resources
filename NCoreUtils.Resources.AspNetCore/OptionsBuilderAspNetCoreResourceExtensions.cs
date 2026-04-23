@@ -9,7 +9,7 @@ public static class OptionsBuilderAspNetCoreResourceExtensions
     public static OptionsBuilder<CompositeResourceFactoryConfiguration> AddAspNetCoreResourceFactory(
         this OptionsBuilder<CompositeResourceFactoryConfiguration> optionsBuilder)
     {
-        optionsBuilder.Configure<IHttpContextAccessor>((config, httpContextAccessor) =>
+        optionsBuilder.ThrowIfNull().Configure<IHttpContextAccessor>((config, httpContextAccessor) =>
         {
             config.AddFactory(new AspNetCoreResourceFactory(httpContextAccessor));
         });

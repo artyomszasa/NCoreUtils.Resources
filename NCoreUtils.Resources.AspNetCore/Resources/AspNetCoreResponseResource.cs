@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Http;
 using NCoreUtils.IO;
 
@@ -6,7 +5,7 @@ namespace NCoreUtils.Resources;
 
 public class AspNetCoreResponseResource(HttpResponse response) : IWritableResource
 {
-    public HttpResponse Response { get; } = response ?? throw new ArgumentNullException(nameof(response));
+    public HttpResponse Response { get; } = response.ThrowIfNull();
 
     public bool Reusable => false;
 

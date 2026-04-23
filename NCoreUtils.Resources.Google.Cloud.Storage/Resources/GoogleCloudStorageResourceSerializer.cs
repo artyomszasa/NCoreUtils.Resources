@@ -11,6 +11,7 @@ namespace NCoreUtils.Resources;
 
 public static class GoogleCloudStorageResourceSerializer
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "Publikus API része.")]
     public static class UriParameters
     {
         public const string ContentType = "ctype";
@@ -97,12 +98,14 @@ public static class GoogleCloudStorageResourceSerializer
         return ref builder;
     }
 
+    [SuppressMessage("Performance", "CA1848:Use the LoggerMessage delegates", Justification = "Most még nem vezetjük ki LoggerMessage-re.")]
     public static async ValueTask<Uri> SerializeAsync(
         ILogger? logger,
         GoogleCloudStorageResource resource,
         CancellationToken cancellationToken)
     {
-        var accessToken = await resource.Credential.GetAccessTokenAsync(GoogleCloudStorageUtils.ReadWriteScope, cancellationToken);
+        resource.ThrowIfNull();
+        var accessToken = await resource.Credential.GetAccessTokenAsync(GoogleCloudStorageUtils.ReadWriteScope, cancellationToken).ConfigureAwait(false);
         var isPublic = resource.IsPublic ? "true" : string.Empty;
         var builder = new UriBuilder
         {
@@ -129,6 +132,7 @@ public static class GoogleCloudStorageResourceSerializer
         }
     }
 
+    [SuppressMessage("Performance", "CA1848:Use the LoggerMessage delegates", Justification = "Most még nem vezetjük ki LoggerMessage-re.")]
     public static bool TryDeserialize(
         Uri uri,
         ILogger logger,

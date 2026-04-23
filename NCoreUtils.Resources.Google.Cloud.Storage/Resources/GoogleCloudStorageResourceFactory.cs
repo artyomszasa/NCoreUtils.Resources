@@ -13,7 +13,7 @@ public class GoogleCloudStorageResourceFactory(
     bool publicByDefault)
     : IResourceFactory
 {
-    public GoogleCloudStorageUtils Utils { get; } = utils ?? throw new ArgumentNullException(nameof(utils));
+    public GoogleCloudStorageUtils Utils { get; } = utils.ThrowIfNull();
 
     public IGoogleAccessTokenProvider? AccessTokenProvider { get; } = accessTokenProvider;
 

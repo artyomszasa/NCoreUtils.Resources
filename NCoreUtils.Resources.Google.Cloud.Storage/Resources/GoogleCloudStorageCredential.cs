@@ -69,7 +69,7 @@ public readonly struct GoogleCloudStorageCredential : IEquatable<GoogleCloudStor
     {
         null => AccessTokenProvider switch
         {
-            null => throw new InvalidOperationException("Invalid Google Storage credential."),
+            null => 0,
             var accessTokenProvider => HashCode.Combine(1, RuntimeHelpers.GetHashCode(accessTokenProvider))
         },
         var accessToken => HashCode.Combine(0, accessToken)

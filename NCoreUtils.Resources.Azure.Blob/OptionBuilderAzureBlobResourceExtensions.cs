@@ -13,7 +13,7 @@ public static class OptionBuilderAzureBlobResourceExtensions
     public static OptionsBuilder<CompositeResourceFactoryConfiguration> AddAzureBlobResourceFactory(
         this OptionsBuilder<CompositeResourceFactoryConfiguration> optionsBuilder)
     {
-        optionsBuilder.Configure(static config =>
+        optionsBuilder.ThrowIfNull().Configure(static config =>
         {
             config.AddFactory(new AzureBlobResourceFactory());
         });

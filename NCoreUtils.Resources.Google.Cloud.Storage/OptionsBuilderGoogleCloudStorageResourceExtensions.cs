@@ -22,7 +22,7 @@ public static class OptionsBuilderGoogleCloudStorageExtensions
         bool passthrough = false,
         bool publicByDefault = false)
     {
-        optionsBuilder.Configure<IServiceProvider>((config, serviceProvider) =>
+        optionsBuilder.ThrowIfNull().Configure<IServiceProvider>((config, serviceProvider) =>
         {
             var utils = serviceProvider.GetService<GoogleCloudStorageUtils>() switch
             {

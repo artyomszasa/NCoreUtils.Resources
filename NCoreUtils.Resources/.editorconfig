@@ -1,0 +1,6 @@
+# Top level entry required to mark this as a global AnalyzerConfig file
+is_global = true
+
+# CA1002: Mutable List is intentional in this configuration object
+
+dotnet_diagnostic.CA1002.severity = silent
